@@ -6,15 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "flow": "flow"
   },
   "dependencies": {
+    "axios": "^1.6.5",
+    "color-thief-react": "^2.1.0",
+    "next": "14.0.4",
     "react": "^18",
+    "react-color-extractor": "^1.1.2",
     "react-dom": "^18",
-    "next": "14.0.4"
+    "react-native-image-colors": "^1.5.2"
   },
   "devDependencies": {
     "eslint": "^8",
-    "eslint-config-next": "14.0.4"
+    "eslint-config-next": "14.0.4",
+    "flow-bin": "^0.225.1"
   }
 }

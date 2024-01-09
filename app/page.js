@@ -1,95 +1,86 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import apiLol from "@/api/Lol";
+import React, { useEffect, useState } from "react";
 
-export default function Home() {
+const Page = () => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await apiLol.get();
+        setData(data.data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(17pc, 1fr))",
+      }}
+    >
+      {Object.entries(data || {}).map(([key, character], index) => (
+        <div
+          key={index}
+          className="card"
+          style={{
+            border: "1px solid white",
+            margin: 10,
+            position: "relative",
+          }}
+        >
+          <div
+            className="background"
+            style={{
+              backgroundImage: `url("https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${character.name}_0.jpg")`,
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+              opacity: 0.5, // Cambia este valor para ajustar la opacidad
+              position: "absolute",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              zIndex: -1,
+              filter: "blur(4px)",
+            }}
+          ></div>
+          <div
+            className="content"
+            style={{
+              position: "relative",
+            }}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            <h1>{character.title}</h1>
+            <h3>Name: {character.name}</h3>
+            <p>Blurb: {character.blurb}</p>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-around'
+            }}>
+              <img
+                src={`https://ddragon.leagueoflegends.com/cdn/13.24.1/img/champion/${character.image.full}`}
+                alt={character.name}
+              />
+              <div>
+                <p>attack: {character.info.attack}</p>
+                <p>defense: {character.info.defense}</p>
+                <p>difficulty: {character.info.difficulty}</p>
+                <p>magic: {character.info.magic}</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      ))}
+    </div>
+  );
+};
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+export default Page;
